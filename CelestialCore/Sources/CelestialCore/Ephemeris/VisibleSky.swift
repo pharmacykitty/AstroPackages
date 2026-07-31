@@ -49,15 +49,23 @@ public enum VisibleSky {
             let jd = JulianDay(d)
             return CoordinateTransform.horizontal(equatorial(jd), at: location, time: jd).altitude
         }
+        // Each body crosses a different effective horizon: the Sun's upper limb
+        // defines sunrise (−50′), the Moon's geocentric scan must offset its
+        // parallax (+0.125°), and point-like planets use plain refraction.
+        let horizon: Angle = switch kind {
+        case .sun: RiseSet.sunHorizon
+        case .moon: RiseSet.moonHorizon
+        case .planet: RiseSet.standardHorizon
+        }
         let jd = JulianDay(date)
         let now = CoordinateTransform.horizontal(equatorial(jd), at: location, time: jd)
-        let up = now.altitude.degrees > RiseSet.standardHorizon.degrees
+        let up = now.altitude.degrees > horizon.degrees
         // 5-minute sampling (interpolated) keeps the whole feed well under a second
         // while staying accurate to a minute or two for display.
         return SkyBodyStatus(
             name: name, kind: kind, altitude: now.altitude, azimuth: now.azimuth, isUp: up,
-            nextRise: RiseSet.next(.rise, from: date, step: 300, altitude: altitude),
-            nextSet: RiseSet.next(.set, from: date, step: 300, altitude: altitude))
+            nextRise: RiseSet.next(.rise, from: date, step: 300, horizon: horizon, altitude: altitude),
+            nextSet: RiseSet.next(.set, from: date, step: 300, horizon: horizon, altitude: altitude))
     }
 
     private static func displayName(_ planet: Planet) -> String {
