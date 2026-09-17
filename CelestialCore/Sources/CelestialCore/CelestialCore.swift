@@ -1,4 +1,4 @@
-/// CelestialCore — the platform-agnostic astronomy engine for Astrolabe.
+/// CelestialCore — the platform-agnostic astronomy engine behind Astrelia and Selenia.
 ///
 /// Pure computation only: no UIKit/SwiftUI, no sensors, no global mutable state.
 /// Everything here is `Sendable` so it stays safe under Swift 6 strict concurrency,

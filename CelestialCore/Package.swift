@@ -1,7 +1,7 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
-// CelestialCore is the platform-agnostic astronomy engine for Astrolabe.
+// CelestialCore is the platform-agnostic astronomy engine behind Astrelia and Selenia.
 // Swift 6 language mode is set package-wide, which turns on *complete* strict
 // concurrency checking for every target. No UIKit/SwiftUI/sensor code lives here.
 let package = Package(
